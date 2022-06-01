@@ -12,6 +12,7 @@ import (
 )
 
 func run() error {
+	
 	ctx := context.Background()
 
 	db, err := sql.Open("postgres", "postgres://root:Pass_1234@localhost:5432/postgres_sqlc_guide?sslmode=verify-full")
