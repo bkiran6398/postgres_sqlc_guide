@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
-	"reflect"
 
 	"github.com/bkiran6398/postgres_sqlc_guide/internal/postgres"
 
@@ -12,41 +12,52 @@ import (
 )
 
 func run() error {
-	
+
 	ctx := context.Background()
 
-	db, err := sql.Open("postgres", "postgres://root:Pass_1234@localhost:5432/postgres_sqlc_guide?sslmode=verify-full")
+	db, err := sql.Open("postgres", "postgres://root:Pass_1234@localhost:5432/postgres_sqlc_guide")
 	if err != nil {
 		return err
 	}
 
-	queries := postgres.New(db)
+	pg := postgres.New(db)
 
-	// list all authors
-	authors, err := queries.AuthorList(ctx)
+	// Create a new user
+	u := postgres.UserCreateParams{
+		Name:     "bkiran",
+		Password: "Pass_1234",
+	}
+
+	user, err := pg.UserCreate(ctx, u)
 	if err != nil {
 		return err
 	}
-	log.Println(authors)
+	fmt.Println("User:", user)
 
-	// create an author
-	insertedAuthor, err := queries.AuthorCreate(ctx, postgres.AuthorCreateParams{
-		Name: "Brian Kernighan",
-		Bio:  sql.NullString{String: "Co-author of The C Programming Language and The Go Programming Language", Valid: true},
-	})
+	// Create a new item
+	i := postgres.ItemCreateParams{
+		Name:        "Item 1",
+		Description: sql.NullString{String: "Description 1", Valid: true},
+		Cost:        10.00,
+	}
+
+	item, err := pg.ItemCreate(ctx, i)
 	if err != nil {
 		return err
 	}
-	log.Println(insertedAuthor)
+	fmt.Println("Item:", item)
 
-	// get the author we just inserted
-	fetchedAuthor, err := queries.AuthorGet(ctx, insertedAuthor.ID)
+	// Create a new order
+	o := postgres.OrderCreateParams{
+		UserID: user.ID,
+		ItemID: item.ID,
+	}
+
+	order, err := pg.OrderCreate(ctx, o)
 	if err != nil {
 		return err
 	}
-
-	// prints true
-	log.Println(reflect.DeepEqual(insertedAuthor, fetchedAuthor))
+	fmt.Println("Order:", order)
 	return nil
 }
 

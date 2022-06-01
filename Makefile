@@ -21,7 +21,7 @@ flags: ## run the postgres_sqlc_guide:
 
 .PHONY: gendb
 gendb: ## run the db generator:
-	sqlc generate
+	sqlc generate -f ./internal/postgres/config/sqlc.yaml
 
 # Docker
 .PHONY : docker

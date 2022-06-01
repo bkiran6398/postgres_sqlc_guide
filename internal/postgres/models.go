@@ -6,10 +6,30 @@ package postgres
 
 import (
 	"database/sql"
+	"time"
 )
 
-type Author struct {
-	ID   int64          `json:"id"`
-	Name string         `json:"name"`
-	Bio  sql.NullString `json:"bio"`
+type Item struct {
+	ID          int32          `json:"id"`
+	Name        string         `json:"name"`
+	Description sql.NullString `json:"description"`
+	Cost        int32          `json:"cost"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+}
+
+type Order struct {
+	ID        int32     `json:"id"`
+	UserID    int32     `json:"user_id"`
+	ItemID    int32     `json:"item_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type User struct {
+	ID        int32     `json:"id"`
+	Name      string    `json:"name"`
+	Password  string    `json:"password"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
