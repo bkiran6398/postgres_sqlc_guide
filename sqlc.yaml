@@ -1,0 +1,14 @@
+# file to configure the SQLC behavior
+version: "1"
+project:
+    id: "postgres_sqlc_guide"
+packages:
+-   name: postgres
+    path: "./internal/postgres"
+    schema: "./internal/postgres/schema/"
+    queries: "./internal/postgres/queries/"
+    engine: "postgresql"
+    emit_json_tags: true
+    emit_interface: false
+    emit_exact_table_names: false
+    
